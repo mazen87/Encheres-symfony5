@@ -1,0 +1,12 @@
+{% extends 'gabarit.html.twig' %}
+
+{% block title %}Email vérification{% endblock %}
+
+{% block main %}
+    <p>
+        un email contenant un lien permettant de réintialiser votre mot de passe a été envoyé. 
+       
+        ce lien expirera  dans  {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+    </p>
+    <p> si vous n'avez pas reçu un email vérifier vos spam svp ou  <a href="{{ path('app_forgot_password_request') }}">essayer à nouveau</a>.</p>
+{% endblock %}

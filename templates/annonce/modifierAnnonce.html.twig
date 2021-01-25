@@ -1,0 +1,12 @@
+{% extends 'gabarit.html.twig' %}
+{% block title %} {{parent()}} | Modifier annonce{% endblock %}
+{% block main %}
+<h2> Modifier Annonce </h2>
+    {{ form_start(formModifierAnnonce) }}
+    {{ form_widget(formModifierAnnonce) }}
+    <input type="submit" value="Modifier"/>
+    {{ form_end(formModifierAnnonce) }}
+    
+   <!-- <img src={{asset("uploads/images/products/cvv.jpg")}}>-->
+
+{% endblock %}

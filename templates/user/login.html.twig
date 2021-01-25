@@ -1,0 +1,12 @@
+{% extends 'gabarit.html.twig' %}
+{% block main %} 
+<h2> Connexion</h2>
+    <form method="POST" >
+        <input  type="text" name="_username" placeholder="Pseudo"/>
+        <input  type="text" name="_password" placeholder="Mot de passe"/>
+        <input type="submit" value="Se Connecter"/>
+        
+
+{% endblock %}
+
+{% block title %}  {{ parent()}} | Connexion{% endblock %} 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="FR">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet/less" type="text/css" href= {{asset("index.less")}} />
+        <script src={{asset("Less/less.js")}}></script>
+        <title> {% block title %} Enchères {% endblock %}</title>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+              <div class="topnav">
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <a class="active" href={{path('accueil')}}> Accueil</a>
+                    <a href={{path('mon_profil',{'id':app.user.id})}}>Mon Profil</a>
+                    <a href={{path('annonce_add')}}>Ajouter Annonce</a>
+                    <a href={{path('mon_profil_mdp',{'id':app.user.id})}}>Modifier profil & Mot de passe</a>
+                    <a href={{path('logout')}}>Déconnexion</a>
+                    {% else %}
+                    <a href={{path('login')}}>Connexion</a>
+                    <a href={{path('user_inscription')}}>Inscription</a>
+                    <a href="http://localhost:8000/reset-password">Mot de passe oublié</a>
+                    {% endif %}
+              </div>
+               <h1> Enchères</h1>
+               </header>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                <div  class="flash-{{ label }}"> {{message}} </div>
+                {% endfor %}
+            {% endfor %}    
+            
+            <main>
+                {% block main%} {% endblock%}
+            </main>
+            <div class="separateur">      
+            
+            
+            </div>
+
+            <footer>
+                &copy  {{ "now" | date("Y") }} Enchères
+            </footer>
+        
+        </div>
+    
+    
+    </body>
+
+</html>

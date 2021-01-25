@@ -1,0 +1,13 @@
+{% extends 'gabarit.html.twig' %}
+
+{% block title %}Réinitialiser MDP{% endblock %}
+
+{% block main %}
+    <h1>Réinitialiser Mot de Passe</h1>
+
+    {{ form_start(resetForm) }}
+        {{ form_row(resetForm.plainPassword) }}
+       <!-- <button class="btn btn-primary">Reset password</button>-->
+       <input type="submit" value="Réinitialiser mot de passe "/>
+    {{ form_end(resetForm) }}
+{% endblock %}
