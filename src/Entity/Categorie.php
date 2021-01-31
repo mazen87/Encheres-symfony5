@@ -33,9 +33,10 @@ class Categorie
      */
     private $nom;
     /**
-     * ORM\OneToMany(targetEntity="App\Entity\Annonce", mappedBy="categorie")
+     * @ORM\OneToMany(targetEntity="App\Entity\Annonce", mappedBy="categorie")
      */
     private $annonces;
+
     public function __construct()
     {
         $this->annonces = new ArrayCollection();

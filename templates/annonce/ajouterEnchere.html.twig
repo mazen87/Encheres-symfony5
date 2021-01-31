@@ -1,0 +1,16 @@
+{% extends 'gabarit.html.twig' %}
+{% block title %}{{parent()}} | Enchérir {% endblock %}
+{% block main %}
+    <h2> Enchérir </h2>
+    <h4> veuillez saisir un numéro supérieur de 
+        {% if annonce.prixPropose is not null %}
+          {{ annonce.prixPropose}}
+        {% else %}
+          {{ annonce.prixDepart}}    
+        {% endif %}
+    </h4>
+    {{ form_start(enchereForm)}}
+    {{ form_widget(enchereForm)}}
+    <input type="submit" value="Enchérir" />
+    {{ form_end(enchereForm)}}
+{% endblock %}

@@ -1,8 +1,56 @@
 {% extends 'gabarit.html.twig' %}
 {% block main %} 
 <h2> Accueil</h2>
+{% set url = "uploads/images/products/"%}
+<div class="page_accueil" style="display: grid;grid-template-columns: 1fr 1fr 1fr;grid-template-rows: 1fr 1fr 1fr;">
+{% for annonce in annonces %}
+<div class="annonce" style="background-color: white;margin:10px;box-shadow: 2px 2px black;">
+{% if  annonce.image is not null %}
+<img src={{asset(asset("images/products/")) ~ annonce.image}}  alt="annonce_img" style=" width:110px;heihgt:80px "  /><br>
+{% endif %}
+ Titre : {{ annonce.titre}}<br>
+Description :{{  annonce.description}}<br>
+Prix de Départ : {{annonce.prixDepart}}<br>
+Prix Achat Immédiat : {{annonce.prixImmediat}}<br>
+Prix Proposé : {{annonce.prixPropose}}<br>
+Date début Enchères : {{annonce.dateDebutEnchere | date("d/m/Y")}}<br>
+Date de Clôture : {{annonce.dateFin | date("d/m/Y") }}<br>
+Catégorie : {{annonce.categorie.nom}}<br>
+Createur de l'Annonce : {{annonce.createur.nom}}<br>
+  {% if is_granted('IS_AUTHENTICATED_REMEMBERED')  %}
+     {% if annonce.createur.email == app.user.email %}
+          {% if annonce.dateDebutEnchere | date > "now"| date or ("now"| date > annonce.dateFin | date and annonce.prixPropose is null )%}
+               <a href={{path('annonce_modifier',{'id':annonce.id})}}>Modifier</a>
+               <a href={{path('annonce_add',{'id':annonce.id})}}
+                onclick="return confirm('voulez vous supprimer cet annonce ? ')">Supprimer</a> 
+          {% endif %}
+     {% endif %}
 
+     {% if annonce.createur.email != app.user.email %}
+        {% if annonce.dateDebutEnchere | date > "now"| date or ("now"| date > annonce.dateFin | date and annonce.prixPropose is null ) %}
+               <a href={{path('achat_immediat',{'id':annonce.id})}} 
+               onclick="return confirm('voulez vous acheter cet article ? ')">Achat immédiat</a>
+        {% endif %}
 
+        {% if annonce.dateDebutEnchere | date < "now"| date and "now"| date < annonce.dateFin | date %}
+              <a href={{path('annonce_encherir',{'id':annonce.id})}}>Enchérir</a>
+              {% if annonce.prixPropose is null %}
+                   <a href={{path('achat_immediat',{'id':annonce.id})}} 
+                   onclick="return confirm('voulez vous acheter cet article ? ')">Achat immédiat</a>   
+              {% endif %}
+              {% if  annonce.prixPropose is not null %} 
+                  {% if annonce.prixPropose < annonce.prixImmediat %}
+                         <a href={{path('achat_immediat',{'id':annonce.id})}}
+                          onclick="return confirm('voulez vous acheter cet article ? ')">Achat immédiat</a>
+                  {% endif %}
+              {% endif %}
+
+        {% endif %}
+     {% endif %}
+  {% endif %}    
+</div>
+{% endfor %}
+</div>
 
 
 

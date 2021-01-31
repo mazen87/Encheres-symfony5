@@ -45,14 +45,19 @@ class AnnonceType extends AbstractType
                     'placeholder'=>'Prix immédiat'
                 ]
             ])
-            ->add('prixPropose',NumberType::class,[
-                'label'=>false,
-                'required'=>false,
-                'attr'=>[
-                    'placeholder'=>'Prix proposé'
+           // ->add('prixPropose',NumberType::class,[
+             //   'label'=>false,
+               // 'required'=>false,
+                //'attr'=>[
+                  //  'placeholder'=>'Prix proposé'
                    
-                ]
-            ])
+               // ]
+           // ])
+           ->add('dateDebutEnchere',DateType::class,[
+            'attr'=>[
+                'class'=>'formLabel'
+            ]
+        ])
             ->add('dateFin',DateType::class,[
                 'attr'=>[
                     'class'=>'formLabel'

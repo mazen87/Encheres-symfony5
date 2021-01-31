@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AnnonceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert; 
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -22,7 +24,7 @@ class Annonce
     private $id;
 
      /**
-     * @ORM\Column(type="string", length=255,nullable=true )
+     * @ORM\Column(type="string", length=255, nullable=true )
      * @var string
      */
     private $image;
@@ -34,7 +36,7 @@ class Annonce
     private $imageFile;
 
        /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime",nullable=true)
      * @var \DateTime
      */
     private $updatedAt;
@@ -54,11 +56,17 @@ class Annonce
     * @ORM\Column(type="datetime")
     */
    private $dateCreation;
+
+    /**
+    * @ORM\Column(type="datetime",nullable=true )
+    */
+    private $dateDebutEnchere;
    /**
      * @Assert\Type(type="float" ,message="saisissez des valeurs valides SVP ! ")
      * @ORM\column(type="float",nullable=true)
     */
    private $prixDepart;
+   
     /**
      * @Assert\Type(type="float" ,message="saisissez des valeurs valides SVP ! ")
      * @ORM\column(type="float",nullable=true)
@@ -82,14 +90,27 @@ class Annonce
     */
    private $disponible;
 
+   
    /**
     * @ORM\ManyToOne(targetEntity="App\Entity\Categorie", inversedBy="annonces")
     */
    private $categorie;
+   
+   
    /**
     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="annonces")
     */
    private $createur;
+
+   /**
+    * @ORM\OneToMany(targetEntity=Enchere::class, mappedBy="annonce")
+    */
+   private $encheres;
+
+   public function __construct()
+   {
+       $this->encheres = new ArrayCollection();
+   }
 
 
 
@@ -350,7 +371,7 @@ class Annonce
      *
      * @return  self
      */ 
-    public function setImage(string $image)
+    public function setImage(string $image= null)
     {
         $this->image = $image;
 
@@ -406,6 +427,60 @@ class Annonce
     {
         $this->updatedAt = $updatedAt;
 
+        return $this;
+    }
+
+    /**
+     * @return Collection|Enchere[]
+     */
+    public function getEncheres(): Collection
+    {
+        return $this->encheres;
+    }
+
+    public function addEnchere(Enchere $enchere): self
+    {
+        if (!$this->encheres->contains($enchere)) {
+            $this->encheres[] = $enchere;
+            $enchere->setAnnonce($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnchere(Enchere $enchere): self
+    {
+        if ($this->encheres->removeElement($enchere)) {
+            // set the owning side to null (unless already changed)
+            if ($enchere->getAnnonce() === $this) {
+                $enchere->setAnnonce(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the value of dateDebutEnchere
+     */ 
+    public function getDateDebutEnchere()
+    {
+        return $this->dateDebutEnchere;
+    }
+
+    /**
+     * Set the value of dateDebutEnchere
+     *
+     * @return  self
+     */ 
+    public function setDateDebutEnchere($dateDebutEnchere )
+    {
+        if($dateDebutEnchere === null){
+         $this->dateDebutEnchere = $this->dateCreation;
+        }
+        else{
+        $this->dateDebutEnchere = $dateDebutEnchere;
+       } 
         return $this;
     }
 }
