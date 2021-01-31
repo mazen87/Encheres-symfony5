@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserInscriptionType;
 use App\Form\UserModificationType;
+use App\Repository\AnnonceRepository;
+use App\Repository\EnchereRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +17,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
+
+
     /**
      * @Route("/user", name="user")
      */
@@ -109,10 +113,14 @@ class UserController extends AbstractController
     /**
      * @Route("/", name="accueil")
      */
-    public function accueil(){
-        
+    public function accueil(AnnonceRepository $annonceRepo,EntityManagerInterface $em,Request $request ){
+        $annonces = $annonceRepo->selectToutesAnnonces();
+        //$annonces = $annonceRepo->findAll();
+        dump($annonces);
           
-        return $this->render("user/accueil.html.twig");
+        return $this->render("user/accueil.html.twig",[
+            'annonces'=>$annonces
+        ]);
     }
 
     /**

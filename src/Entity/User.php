@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert; 
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -83,9 +84,28 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Annonce", mappedBy="createur")
      */
     private $annonces;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Enchere::class, mappedBy="encherisseur")
+     */
+    private $encheres;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="envoyeur")
+     */
+    private $messages_envoyes;
+
+     /**
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="destinataire")
+     */
+    private $messages_recus;
+    
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
+        $this->encheres = new ArrayCollection();
+        $this->messages_envoyes = new ArrayCollection();
+        $this->messages_recus = new ArrayCollection();
     }
 
     
@@ -317,6 +337,97 @@ class User implements UserInterface
     public function setAnnonces($annonces)
     {
         $this->annonces = $annonces;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Enchere[]
+     */
+    public function getEncheres(): Collection
+    {
+        return $this->encheres;
+    }
+
+    public function addEnchere(Enchere $enchere): self
+    {
+        if (!$this->encheres->contains($enchere)) {
+            $this->encheres[] = $enchere;
+            $enchere->setEncherisseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnchere(Enchere $enchere): self
+    {
+        if ($this->encheres->removeElement($enchere)) {
+            // set the owning side to null (unless already changed)
+            if ($enchere->getEncherisseur() === $this) {
+                $enchere->setEncherisseur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Message[]
+     */
+    public function getMessages_envoyes(): Collection
+    {
+        return $this->messages_envoyes;
+    }
+
+    public function addMessage_envoye(Message $message): self
+    {
+        if (!$this->messages_envoyes->contains($message)) {
+            $this->messages_envoyes[] = $message;
+            $message->setEnvoyeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage_envoye(Message $message): self
+    {
+        if ($this->messages_envoyes->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getEnvoyeur() === $this) {
+                $message->setEnvoyeur(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+     /**
+     * @return Collection|Message[]
+     */
+    public function getMessages_recus(): Collection
+    {
+        return $this->messages_recus;
+    }
+
+    public function addMessage_recu(Message $message): self
+    {
+        if (!$this->messages_recus->contains($message)) {
+            $this->messages_recus[] = $message;
+            $message->setDestinataire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage_recu(Message $message): self
+    {
+        if ($this->messages_recus->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getDestinataire() === $this) {
+                $message->setDestinataire(null);
+            }
+        }
 
         return $this;
     }
